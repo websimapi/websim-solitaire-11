@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Solitaire</title>
+    <link rel="stylesheet" href="style.css">
+    <style>
+        /* Critical minimal styles to prevent FOUC */
+        body { margin: 0; overflow: hidden; background-color: #2e8b57; }
+    </style>
+</head>
+<body>
+
+    <div id="game-container">
+        <!-- Top Row: Stock, Waste, Foundations -->
+        <div id="top-row">
+            <div id="stock-container" class="pile-container">
+                <div id="stock" class="pile"></div>
+                <div id="stock-empty" class="pile-placeholder">↻</div>
+            </div>
+            <div id="waste-container" class="pile-container">
+                <div id="waste" class="pile"></div>
+            </div>
+            <div class="spacer"></div>
+            <div id="foundation-0" class="pile-container foundation" data-foundation="0"></div>
+            <div id="foundation-1" class="pile-container foundation" data-foundation="1"></div>
+            <div id="foundation-2" class="pile-container foundation" data-foundation="2"></div>
+            <div id="foundation-3" class="pile-container foundation" data-foundation="3"></div>
+        </div>
+
+        <!-- Bottom Row: Tableau -->
+        <div id="tableau-row">
+            <div id="tableau-0" class="pile-container tableau" data-tableau="0"></div>
+            <div id="tableau-1" class="pile-container tableau" data-tableau="1"></div>
+            <div id="tableau-2" class="pile-container tableau" data-tableau="2"></div>
+            <div id="tableau-3" class="pile-container tableau" data-tableau="3"></div>
+            <div id="tableau-4" class="pile-container tableau" data-tableau="4"></div>
+            <div id="tableau-5" class="pile-container tableau" data-tableau="5"></div>
+            <div id="tableau-6" class="pile-container tableau" data-tableau="6"></div>
+        </div>
+        
+        <div id="stats-bar">
+            <div class="stat-item">SCORE <span id="score-display">0</span></div>
+            <div class="stat-item">TIME <span id="time-display">00:00</span></div>
+            <div class="stat-item">MOVES <span id="moves-display">0</span></div>
+        </div>
+        
+        <div id="win-overlay" class="hidden">
+            <div class="win-message">
+                <h1>You Win!</h1>
+                <button id="restart-btn">Play Again</button>
+            </div>
+        </div>
+
+        <div id="menu-overlay" class="hidden">
+            <div class="menu-container">
+                <button id="menu-new-deal-btn" class="menu-btn primary">New Deal</button>
+                <button class="menu-btn disabled">Empty</button>
+                <button class="menu-btn disabled">Empty</button>
+                <button class="menu-btn disabled">Empty</button>
+                <button class="menu-btn disabled">Empty</button>
+                <button id="menu-close-btn" class="menu-btn secondary">Close</button>
+            </div>
+        </div>
+
+        <!-- Bottom / Top Nav Bar -->
+        <div id="nav-bar">
+            <button class="nav-btn" id="nav-btn-1"></button>
+            <button class="nav-btn" id="nav-btn-2"></button>
+            <button class="nav-btn action-btn" id="nav-menu-btn">
+                <span class="icon menu-icon">
+                    <span class="mini-card card-1"></span>
+                    <span class="mini-card card-2"></span>
+                    <span class="mini-card card-3"></span>
+                </span>
+                <span class="label">Menu</span>
+            </button>
+            <button class="nav-btn action-btn" id="nav-hint-btn">
+                <span class="icon">💡</span>
+                <span class="label">Hint</span>
+            </button>
+            <button class="nav-btn action-btn" id="nav-undo-btn">
+                <span class="icon">↺</span>
+                <span class="label">Undo</span>
+            </button>
+        </div>
+    </div>
+
+    <!-- Preload sounds -->
+    <script type="module" src="main.js"></script>
+<script defer src="https://static.cloudflareinsights.com/beacon.min.js/v8c78df7c7c0f484497ecbca7046644da1771523124516" integrity="sha512-8DS7rgIrAmghBFwoOTujcf6D9rXvH8xm8JQ1Ja01h9QX8EzXldiszufYa4IFfKdLUKTTrnSFXLDkUEOTrZQ8Qg==" data-cf-beacon='{"version":"2024.11.0","token":"4c6229722a6346bc8eb5cb0e5eae5d41","server_timing":{"name":{"cfCacheStatus":true,"cfEdge":true,"cfExtPri":true,"cfL4":true,"cfOrigin":true,"cfSpeedBrain":true},"location_startswith":null}}' crossorigin="anonymous"></script>
+</body>
+</html>

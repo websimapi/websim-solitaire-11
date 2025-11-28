@@ -1,0 +1,519 @@
+:root {
+    --card-width: 12.5vw;
+    --card-height: 17.5vw;
+    --card-gap: 1.2vw;
+    --bg-color: #2e8b57;
+    --card-radius: 4px;
+    --text-color: #fff;
+    --card-border: 1px solid #aaa;
+    --card-font-size: 3.5vw;
+}
+
+/* Desktop tweaks */
+@media (min-width: 600px) {
+    :root {
+        --card-width: 80px;
+        --card-height: 112px;
+        --card-gap: 20px;
+        --card-font-size: 20px;
+        --card-radius: 6px;
+    }
+}
+
+body {
+    margin: 0;
+    padding: 0;
+    width: 100vw;
+    height: calc(var(--vh, 1vh) * 100);
+    position: relative;
+    /* Use a relaxing seasonal image as the main background */
+    background-color: var(--bg-color);
+    background-image: url('spring.png');
+    background-size: cover;
+    background-position: center center;
+    background-repeat: no-repeat;
+    background-attachment: scroll;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    overflow: hidden;
+    user-select: none;
+    -webkit-user-select: none;
+    touch-action: none;
+}
+
+/* Mobile-first tuning for background to ensure full-screen fit */
+@media (max-width: 599px) {
+    body {
+        /* Stretch image to exactly fill viewport width and height on mobile */
+        background-size: 100% 100%;
+        background-position: center center;
+        background-repeat: no-repeat;
+        background-attachment: scroll;
+    }
+}
+
+#game-container {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    height: 100%;
+    padding: var(--card-gap);
+    box-sizing: border-box;
+}
+
+#top-row {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    margin-bottom: var(--card-gap);
+    height: var(--card-height);
+    flex-shrink: 0;
+    gap: var(--card-gap);
+}
+
+.spacer {
+    flex-grow: 1;
+}
+
+#tableau-row {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    flex-grow: 1;
+    position: relative;
+}
+
+#stats-bar {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+    padding: 8px 18px;
+    background: rgba(0, 0, 0, 0.3);
+    color: white;
+    font-size: 0.9rem;
+    font-weight: 700;
+    flex-shrink: 0;
+    margin: 6px 5px 3px;
+    border-radius: 5px;
+    font-family: monospace;
+}
+
+.stat-item {
+    display: flex;
+    gap: 8px;
+    align-items: center;
+}
+
+.stat-item span {
+    font-size: 1.1em;
+}
+
+/* Nav bar at bottom (or top when game-container has col-reverse) */
+#nav-bar {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: stretch;
+    gap: 0;
+    margin-top: 5px;
+    height: 8vh;
+    min-height: 40px;
+    max-height: 55px;
+    flex-shrink: 0;
+}
+
+.nav-btn {
+    flex: 1;
+    margin: 3px 2px;
+    border-radius: 8px;
+    border: none;
+    background: rgba(0, 0, 0, 0.25);
+    cursor: pointer;
+    touch-action: manipulation;
+    padding: 0;
+}
+
+.action-btn {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    line-height: 1;
+    color: white;
+}
+
+.action-btn .icon {
+    font-size: 1.5rem;
+    margin-bottom: 2px;
+}
+
+.action-btn .label {
+    font-size: 0.65rem;
+    text-transform: uppercase;
+    font-weight: 700;
+    letter-spacing: 0.5px;
+}
+
+#nav-menu-btn .icon {
+    margin-bottom: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.menu-icon {
+    position: relative;
+    width: 28px;
+    height: 22px;
+    transform: rotate(10deg);
+}
+
+.menu-icon .mini-card {
+    position: absolute;
+    width: 16px;
+    height: 20px;
+    background: #ffffff;
+    border-radius: 3px;
+    border: 1px solid rgba(0, 0, 0, 0.3);
+    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.4);
+    box-sizing: border-box;
+}
+
+.menu-icon .card-1 {
+    left: 0;
+    top: 0;
+    transform: rotate(-20deg);
+}
+
+.menu-icon .card-2 {
+    left: 6px;
+    top: -2px;
+    transform: rotate(0deg);
+}
+
+.menu-icon .card-3 {
+    left: 12px;
+    top: -4px;
+    transform: rotate(20deg);
+}
+
+/* Undo button on far right can be visually distinct later if desired */
+#nav-undo-btn {
+    /* Removed specific font-size to align with new action-btn style */
+}
+
+.pile-container {
+    width: var(--card-width);
+    height: var(--card-height);
+    position: relative;
+    border-radius: var(--card-radius);
+    background-color: rgba(0, 0, 0, 0.1);
+    box-sizing: border-box;
+}
+
+.pile-placeholder {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    color: rgba(255, 255, 255, 0.5);
+    font-size: 2rem;
+    cursor: pointer;
+    border: 2px solid rgba(255, 255, 255, 0.2);
+    border-radius: var(--card-radius);
+    box-sizing: border-box;
+}
+
+.card {
+    width: var(--card-width);
+    height: var(--card-height);
+    background-color: white;
+    position: absolute;
+    border-radius: var(--card-radius);
+    box-shadow: 0 1px 3px rgba(0,0,0,0.3);
+    border: var(--card-border);
+    box-sizing: border-box;
+    display: block;
+    padding: 0;
+    font-size: var(--card-font-size);
+    cursor: pointer;
+    transition: transform 0.1s ease-out;
+    font-weight: bold;
+}
+
+.card.red { color: #d40000; }
+.card.black { color: #111; }
+
+.card-corner {
+    position: absolute;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+    line-height: 1;
+    padding: 0.15em;
+    box-sizing: border-box;
+    white-space: nowrap;
+    width: 100%;
+    overflow: hidden;
+}
+
+.card-corner .rank {
+    letter-spacing: -0.05em;
+    font-weight: 700;
+    font-size: 1.8em;
+    margin-right: 0.1em;
+}
+
+.card-corner .suit {
+    font-size: 1.3em;
+    margin-top: 0;
+    margin-left: auto;
+}
+
+.card-corner.top-left {
+    top: 0;
+    left: 0;
+}
+
+.card-corner.bottom-right {
+    bottom: 0;
+    right: 0;
+    transform: rotate(180deg);
+}
+
+.card-center {
+    position: absolute;
+    top: 65%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    font-size: 3.2em;
+    line-height: 1;
+}
+
+.card-back {
+    background: repeating-linear-gradient(
+        45deg,
+        #3b6da7,
+        #3b6da7 10px,
+        #305a8a 10px,
+        #305a8a 20px
+    );
+    border: 2px solid white;
+}
+
+.card-back .card-corner, 
+.card-back .card-center {
+    display: none;
+}
+
+/* Tableau stacking */
+.tableau .card {
+    /* Top gets set via JS */
+}
+
+.dragging {
+    z-index: 1000 !important;
+    pointer-events: none; /* Let events pass through to check drop targets */
+    box-shadow: 5px 5px 15px rgba(0,0,0,0.5);
+    opacity: 0.95;
+}
+
+@keyframes hint-pulse {
+    0% { box-shadow: 0 0 0 0 rgba(255, 255, 0, 0.7); border-color: #ffff00; }
+    70% { box-shadow: 0 0 15px 10px rgba(255, 255, 0, 0); border-color: #ffff00; }
+    100% { box-shadow: 0 0 0 0 rgba(255, 255, 0, 0); border-color: #ffff00; }
+}
+
+.hint-overlay {
+    position: absolute;
+    border: 3px solid #ffff00;
+    border-radius: var(--card-radius);
+    pointer-events: none;
+    z-index: 2000;
+    animation: hint-pulse 1.5s infinite;
+    box-sizing: border-box;
+}
+
+/* Win Overlay */
+#win-overlay {
+    position: absolute;
+    top: 0; left: 0; right: 0; bottom: 0;
+    background: rgba(0,0,0,0.8);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 2000;
+}
+
+.hidden { display: none !important; }
+
+.win-message {
+    text-align: center;
+    color: white;
+}
+
+/* Menu Overlay */
+#menu-overlay {
+    position: absolute;
+    top: 0; left: 0; right: 0; bottom: 0;
+    background: rgba(0,0,0,0.85);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 2500;
+}
+
+.menu-container {
+    background: #fff;
+    padding: 20px;
+    border-radius: 12px;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    width: 250px;
+    max-width: 80%;
+    box-shadow: 0 10px 25px rgba(0,0,0,0.5);
+}
+
+.menu-btn {
+    padding: 12px;
+    font-size: 1.1rem;
+    border: 1px solid #ddd;
+    background: #f8f8f8;
+    color: #333;
+    border-radius: 6px;
+    cursor: pointer;
+    font-weight: 600;
+}
+
+.menu-btn.primary {
+    background: #2e8b57;
+    color: white;
+    border-color: #236b43;
+}
+
+.menu-btn.secondary {
+    background: #ddd;
+    color: #333;
+    margin-top: 5px;
+}
+
+.menu-btn.disabled {
+    opacity: 0.5;
+    background: #eee;
+    color: #999;
+    border-style: dashed;
+    cursor: default;
+}
+
+button {
+    padding: 10px 20px;
+    font-size: 1.2rem;
+    background: #fff;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+/* Adjustments for very small screens */
+@media (max-width: 360px) {
+    :root {
+        --card-gap: 1vw;
+    }
+}
+
+/* Layout Manipulation Classes */
+.row-reverse {
+    flex-direction: row-reverse !important;
+}
+
+.col-reverse {
+    flex-direction: column-reverse !important;
+}
+
+/* Adjust spacing for stats when nav bar is at the top */
+.col-reverse #stats-bar {
+    margin: 3px 5px 6px;
+}
+
+/* Visual feedback for dragging the deck layout */
+.ghost-deck {
+    position: fixed !important;
+    top: 0; left: 0;
+    width: var(--card-width);
+    height: var(--card-height);
+    border-radius: var(--card-radius);
+    background: repeating-linear-gradient(
+        45deg,
+        #3b6da7,
+        #3b6da7 10px,
+        #305a8a 10px,
+        #305a8a 20px
+    );
+    border: 2px solid white;
+    box-shadow: 0 5px 15px rgba(0,0,0,0.5);
+    z-index: 5000;
+    opacity: 0.8;
+    pointer-events: none;
+    box-sizing: border-box;
+}
+
+/* Layout Drop Targets */
+.layout-target {
+    position: fixed;
+    width: var(--card-width);
+    height: var(--card-height);
+    border: 2px dashed rgba(255, 255, 255, 0.3);
+    border-radius: var(--card-radius);
+    pointer-events: none;
+    z-index: 3000;
+    box-sizing: border-box;
+    background: rgba(0, 0, 0, 0.05);
+    transition: all 0.2s ease;
+}
+
+.layout-target.active {
+    background-color: rgba(255, 255, 255, 0.2);
+    border-color: #fff;
+    box-shadow: 0 0 10px rgba(255, 255, 255, 0.5);
+    transform: scale(1.05);
+}
+
+.layout-target.tl { top: var(--card-gap); left: var(--card-gap); }
+.layout-target.tr { top: var(--card-gap); right: var(--card-gap); }
+.layout-target.bl { bottom: var(--card-gap); left: var(--card-gap); }
+.layout-target.br { bottom: var(--card-gap); right: var(--card-gap); }
+
+/* Animation Classes */
+body.dealing {
+    pointer-events: none;
+}
+
+.flying-card {
+    position: fixed;
+    width: var(--card-width);
+    height: var(--card-height);
+    background: repeating-linear-gradient(
+        45deg,
+        #3b6da7,
+        #3b6da7 10px,
+        #305a8a 10px,
+        #305a8a 20px
+    );
+    border: 2px solid white;
+    border-radius: var(--card-radius);
+    box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+    z-index: 9999;
+    pointer-events: none;
+    transition: transform 0.25s ease-out;
+    transform-origin: center center;
+    box-sizing: border-box;
+    will-change: transform;
+}
+
+/* Automatically hide any external divs injected into the body (e.g. ads/overlays) */
+body > div:not(#game-container):not(.flying-card):not(.ghost-deck):not(.layout-target):not(.hint-overlay) {
+    display: none !important;
+}
